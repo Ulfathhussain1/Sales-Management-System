@@ -197,20 +197,22 @@ SQL_QUERIES = {
     # 11. Branch-wise total gross sales
     "11. [Join-Based] Branch-wise total gross sales": {
         "super": """
-            SELECT b.branch_name,
-                   SUM(cs.gross_sales) AS total_gross_sales
-            FROM branches b
-            JOIN customer_sales cs
-                ON b.branch_id = cs.branch_id
+          SELECT
+            b.branch_name,
+                SUM(cs.gross_sales) AS total_gross_sales
+            FROM customer_sales cs
+            RIGHT JOIN branches b
+            ON cs.branch_id = b.branch_id
             GROUP BY b.branch_id, b.branch_name
             ORDER BY total_gross_sales DESC
         """,
         "admin": """
-            SELECT b.branch_name,
-                   SUM(cs.gross_sales) AS total_gross_sales
-            FROM branches b
-            JOIN customer_sales cs
-                ON b.branch_id = cs.branch_id
+             SELECT
+             b.branch_name,
+            SUM(cs.gross_sales) AS total_gross_sales
+            FROM customer_sales cs
+            RIGHT JOIN branches b
+            ON cs.branch_id = b.branch_id
             WHERE b.branch_id = %s
             GROUP BY b.branch_id, b.branch_name
             ORDER BY total_gross_sales DESC
